@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    	<meta name="viewport" id="viewport" content="width=1024, height=600, initial-scale=1.0,user-scalable=no, maximum-scale=1.0" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 99%; margin: 0; padding: 0; background-image: url('image/bg.png'); background-size: 100% 100%; }
+
+	  
+		#map_canvas{
+		float: top;
+		display:block;
+		width:100%;
+		height:70%;
+		border:2px solid;
+		}
+		
+		#directions-panel{
+		float: bottom;
+		display:block;
+		width:100%;
+		height:30%;
+		overflow:scroll;
+		text-align: center;
+		border:2px solid;
+		font-size: 28px;
+		}
+		
+		
+		input[type="text"]
+		{
+			width:200px;
+			height: 30px;
+			font-size: 25px;
+		}
+		input[type="submit"]
+		{
+			width:150px;
+			height: 30px;
+			font-size: 15px;
+		}	
+		#footer{
+				position:absolute;
+				width:600px;
+				
+				bottom:0px;
+				right:15%;
+				
+			}		
+		
+    </style>
+    <script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyD_MAKIOW-8C00YTXdRg_3Xcj_T1Nh91LM&sensor=false">
+    </script>
+    <script type="text/javascript"> 
+        var directionsDisplay;
+        var directionsService = new google.maps.DirectionsService();
+        var map;
+        var bilzen = new google.maps.LatLng( 14.876197, 120.295165);
+
+        function initialize() {
+            directionsDisplay = new google.maps.DirectionsRenderer();
+            var Bilzen = new google.maps.LatLng(14.876197, 120.295165);
+            var myOptions = {
+                zoom:14,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            center: bilzen
+        }
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    directionsDisplay.setMap(map);
+	directionsDisplay.setPanel(document.getElementById('directions-panel'));
+
+        var control = document.getElementById('control');
+        control.style.display = 'block';
+        map.controls[google.maps.ControlPosition.TOP].push(control);
+    }
+
+  function calcRoute() {
+    var start = document.getElementById("start").value;
+    var end =  document.getElementById("end").value;
+    var request = {
+        origin:start, 
+        destination:end,
+        travelMode: google.maps.DirectionsTravelMode.DRIVING,
+        unitSystem: google.maps.DirectionsUnitSystem.metric
+};
+directionsService.route(request, function(response, status) {
+  if (status == google.maps.DirectionsStatus.OK) {
+    directionsDisplay.setDirections(response);
+  }
+});
+  }
+    </script>
+  </head>
+<body onload="initialize()">
+
+<div id="map_canvas"></div>
+<div id="directions-panel">
+<br>
+	<form action="#" onsubmit="calcRoute(); return false;" >
+		<input name="start" id="start" placeholder="start" type="text" value="">
+		<br><br>
+		<input name="end" id="end" placeholder="end" type="text" value="">
+		<br><br>
+		<input name="Submit" type="submit" value="Get Direction">
+    </form>
+</div>
+<div id="footer">
+	<a href="index.html"><img src="image/back.png"></a>
+</footer>
+  </body>
+</html>
